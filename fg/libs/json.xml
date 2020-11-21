@@ -1,0 +1,5 @@
+<Layer Type="ActorFrame"
+  OnCommand='%function( self )
+    @include{json.lua}
+  end'
+/>

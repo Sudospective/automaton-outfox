@@ -1,0 +1,67 @@
+#TITLE:Automaton v4.0.0 Template;
+#SUBTITLE:[2 Players];
+#ARTIST:FMS_Cat;
+#TITLETRANSLIT:;
+#SUBTITLETRANSLIT:;
+#ARTISTTRANSLIT:;
+#GENRE:;
+#CREDIT:;
+#BANNER:black.png;
+#BACKGROUND:black.png;
+#LYRICSPATH:;
+#CDTITLE:black.png;
+#MUSIC:silent.ogg;
+#OFFSET:0.009;
+#SAMPLESTART:42.872;
+#SAMPLELENGTH:15.000;
+#SELECTABLE:YES;
+#DISPLAYBPM:140.000;
+#BPMS:0.000=140.000;
+#STOPS:;
+#TIMESIGNATURES:0.000=4=4;
+#BGCHANGES:;
+
+//The majority of simfile scripts and visual effects are stored here.
+#FGCHANGES:0.000=fg=1.000=0=0=1=====,
+;
+
+#LABELS:4.000=cat-x=0
+8.000=cat-y=0
+12.000=smudge=0
+;
+
+#KEYSOUNDS:;
+
+//---------------dance-single - FMS_Cat----------------
+#NOTES:
+     dance-single:
+     FMS_Cat:
+     Challenge:
+     1:
+     0.000,0.000,0.000,0.000,0.000:
+0000
+0000
+0000
+0000
+,
+0000
+0000
+0000
+0000
+,
+0000
+0000
+0000
+0000
+,
+0000
+0000
+0000
+0000
+,
+00M0
+0000
+0000
+0000
+;
+

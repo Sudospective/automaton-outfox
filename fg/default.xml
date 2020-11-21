@@ -1,0 +1,129 @@
+<Layer Type="ActorFrame"
+  Name="Root"
+  InitCommand="%function( self )
+    -- set global fov
+    self:fov( 60 )
+
+    -- initialize mods
+    if GAMESTATE.LaunchAttack then
+      GAMESTATE:LaunchAttack( 0.0, 9E9, 'clearall, overhead, 1x, zbuffer, receptorzbuffer, 400 grain' )
+    end
+  end"
+><children>
+  <Layer Type="Actor"
+    Name="Automaton Core"
+    OnCommand="%function( self )
+      -- load required libraries
+      local songDir = GAMESTATE:GetCurrentSong():GetSongDir()
+      loadfile( songDir .. 'fg/libs/json.lua' )()
+      loadfile( songDir .. 'fg/libs/automaton.lua' )()
+
+      -- load fx definitions
+      local fxs = {
+        sine = loadfile( songDir .. 'fg/fxs/sine.lua' )(),
+      }
+
+      -- load automaton serialized data
+      local filepath = string.sub( songDir .. 'fg/automaton.json', 2 )
+      local file = io.open( filepath, 'r' )
+      local data = json.decode( file:read( '*a' ) )
+      io.close( file )
+
+      -- initialize automaton
+      automaton = Automaton.new( data, { fxDefinitions = fxs } ) -- GLOBAL
+      auto = automaton.auto -- GLOBAL
+
+      -- set update command
+      self:effectclock( 'music' )
+      self:luaeffect( 'Update' )
+    end"
+
+    UpdateCommand="%function( self )
+      -- get song time
+      local time
+
+      if GAMESTATE.GetSongTime then
+        time = GAMESTATE:GetSongTime() -- nITG have a proper song time!
+      else
+        -- Workaround for oITG: https://discord.com/channels/227650173256466432/227819834480656384/635806437712592896
+        time = PREFSMAN:GetPreference( 'GlobalOffsetSeconds' ) - ( 0.374 - 0.349 ) + self:GetSecsIntoEffect()
+      end
+
+      -- update automaton
+      automaton:update( time )
+
+      -- connect to automaton-electron via automaton-notitg-glue
+      -- it is not required to make automaton work on the game
+      if GAMESTATE.SetExternal then
+        local floorTime = math.floor( time )
+        local fracTime = time - floorTime
+
+        GAMESTATE:SetExternal( 2, floorTime )
+        GAMESTATE:SetExternal( 3, math.floor( 1E6 * fracTime ) )
+      end
+    end"
+  />
+
+  <Layer File="images/cat.png"
+    Name="Cat"
+    OnCommand="%function( self )
+      self:zoom( 0.5 )
+
+      -- set update command
+      self:effectclock( 'music' )
+      self:luaeffect( 'Update' )
+    end"
+
+    UpdateCommand="%function( self )
+      -- receive number values from automaton
+      local x = auto( 'cat/x' ) -- simple bezier curve
+      local y = auto( 'cat/y' ) -- bezier curve + sinewave using fx
+
+      -- apply received values
+      self:x( SCREEN_WIDTH * x )
+      self:y( SCREEN_HEIGHT * y )
+    end"
+  />
+
+  <Layer File="images/smudge.png"
+    Name="Smudge"
+    OnCommand="%function( self )
+      self:visible( 0 )
+      self:x( 0.5 * SCREEN_WIDTH )
+      self:y( 0.5 * SCREEN_HEIGHT )
+
+      -- slightly advanced: automaton also can be used event driven
+
+      -- smudge cat will be visible only when there are playing item on `smudge/visible`
+      auto( 'smudge/visible', function( event )
+        -- event.uninit will be true only if there are ending item on the channel
+        if event.uninit then
+          self:visible( 0 )
+        else
+          self:visible( 1 )
+        end
+      end )
+
+      -- smudge cat will become red when an event is triggered on `smudge/changeColor`
+      auto( 'smudge/changeColor', function( event )
+        self:diffuse( 1.0, 0.0, 0.0, 1.0 )
+      end )
+
+      -- smudge cat will go mad based on the value of `smudge/what`
+      auto( 'smudge/what', function( event )
+        self:x( 0.5 * SCREEN_WIDTH + 128 * event.value * ( math.random() - 0.5 ) )
+        self:y( 0.5 * SCREEN_HEIGHT + 128 * event.value * ( math.random() - 0.5 ) )
+
+        self:zoom( 1.0 + 3.0 * event.value )
+        self:diffusealpha( 1.0 - event.value )
+      end )
+    end"
+  />
+
+  <Layer Type="ActorFrame"
+    Name="Permafrost"
+    OnCommand="%function( self )
+      self:sleep( 9E9 )
+    end"
+  />
+</children></Layer>

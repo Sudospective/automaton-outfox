@@ -1,0 +1,4 @@
+*.sm.old
+*.sm.auto
+*.sm.auto.new
+*.log
