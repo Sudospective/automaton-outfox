@@ -93,6 +93,7 @@
       self:y( 0.5 * SCREEN_HEIGHT )
 
       -- slightly advanced: automaton also can be used event driven
+      -- events will be emitted every frame while the channel is playing any item
 
       -- smudge cat will be visible only when there are playing item on `smudge/visible`
       auto( 'smudge/visible', function( event )
