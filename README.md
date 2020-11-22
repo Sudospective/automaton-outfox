@@ -1,5 +1,11 @@
 # Automaton v4.0.0 oITG / nITG template
 
+### Note
+
+- **This template currently does not work 😩**
+  - Use of `loadfile` and `io.open` , which is broken in current version of NotITG
+  - I usually resolve this by building my own bundler, packing every script files into one
+
 ### What is Automaton?
 
 Automaton is an "animation engine".
