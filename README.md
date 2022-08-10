@@ -47,4 +47,4 @@ See: https://github.com/FMS-Cat/automaton-notitg-glue
 Yes, it isn't well documented.
 If you have questions, you can ping me (@Sudospective) on the OutFox server! (please let 0b5vr rest they are a good bean and did hard work おつかれさま)
 
-[Here's an invite link.](https://discord.gg/cn9tSy672f)
+[Here's an invite link.](https://discord.sudospective.net)
